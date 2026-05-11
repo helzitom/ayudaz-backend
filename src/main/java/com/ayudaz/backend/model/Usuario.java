@@ -2,6 +2,8 @@ package com.ayudaz.backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,8 +24,9 @@ public class Usuario {
     private String telefono;
     private String direccion;
 
-    @Column(name = "fecha_registro")
-    private LocalDateTime fechaRegistro = LocalDateTime.now();
+    @CreationTimestamp
+    @Column(name = "fecha_registro", updatable = false)
+    private LocalDateTime fechaRegistro;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<UsuarioRol> roles;

@@ -1,25 +1,27 @@
 package com.ayudaz.backend.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity @Table(name = "voluntarios")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Entity
+@Table(name = "voluntarios")
+@Getter
+@Setter
 public class Voluntario {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_voluntario")
     private Long idVoluntario;
 
     @OneToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
+    @Column(name = "disponibilidad")
     private String disponibilidad;
 
     @Column(name = "zona_apoyo")
     private String zonaApoyo;
-
-    @OneToMany(mappedBy = "voluntario", cascade = CascadeType.ALL)
-    private List<VoluntarioHabilidad> habilidades;
 }
