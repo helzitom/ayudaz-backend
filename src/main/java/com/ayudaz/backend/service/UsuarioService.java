@@ -1,5 +1,6 @@
 package com.ayudaz.backend.service;
 
+import com.ayudaz.backend.dto.UsuarioDTO;
 import com.ayudaz.backend.model.*;
 import com.ayudaz.backend.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +81,25 @@ public class UsuarioService {
 
     public void eliminar(Long id) {
         usuarioRepo.deleteById(id);
+    }
+
+    public UsuarioDTO toDTO(Usuario usuario) {
+
+        UsuarioDTO dto = new UsuarioDTO();
+
+        dto.setIdUsuario(usuario.getIdUsuario());
+        dto.setNombres(usuario.getNombres());
+        dto.setCorreo(usuario.getCorreo());
+        dto.setTelefono(usuario.getTelefono());
+
+        String rol = usuario.getRoles()
+                .stream()
+                .map(r -> r.getRol().getNombreRol())
+                .findFirst()
+                .orElse("USUARIO");
+
+        dto.setRol(rol);
+
+        return dto;
     }
 }

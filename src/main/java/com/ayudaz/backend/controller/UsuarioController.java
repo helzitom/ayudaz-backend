@@ -1,6 +1,7 @@
 package com.ayudaz.backend.controller;
 
 import com.ayudaz.backend.dto.RegistroRequest;
+import com.ayudaz.backend.dto.UsuarioDTO;
 import com.ayudaz.backend.model.Usuario;
 import com.ayudaz.backend.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +29,17 @@ public class UsuarioController {
     }
 
     @GetMapping("/correo/{correo}")
-    public ResponseEntity<Usuario> buscarPorCorreo(@PathVariable String correo) {
+    public ResponseEntity<UsuarioDTO> buscarPorCorreo(@PathVariable String correo) {
 
-        return service.buscarPorCorreoOpcional(correo)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Usuario user = service.buscarPorCorreo(correo);
+
+        return ResponseEntity.ok(service.toDTO(user));
     }
 
     @PostMapping
     public ResponseEntity<Usuario> crear(@RequestBody RegistroRequest req) {
 
         Usuario usuario = new Usuario();
-
         usuario.setNombres(req.getNombres());
         usuario.setCorreo(req.getCorreo());
         usuario.setTelefono(req.getTelefono());
@@ -55,17 +55,19 @@ public class UsuarioController {
             @PathVariable Long id,
             @RequestBody Usuario datos
     ) {
-
-        return ResponseEntity.ok(
-                service.actualizar(id, datos)
-        );
+        return ResponseEntity.ok(service.actualizar(id, datos));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-
         service.eliminar(id);
-
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/dto/correo/{correo}")
+    public ResponseEntity<UsuarioDTO> getDTOByCorreo(@PathVariable String correo) {
+        Usuario user = service.buscarPorCorreo(correo);
+        return ResponseEntity.ok(service.toDTO(user));
     }
 }
